@@ -1,4 +1,4 @@
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9d5ce609-14c7-4f65-b1f2-49f7782f3728" /># Markdown 编辑器
+# Markdown 编辑器
 
 基于 Flask + Vue3 的在线 Markdown 编辑器系统。
 
@@ -37,5 +37,5 @@ npm run dev
 ### 打开http://localhost:3000/
 ### 支持日间/夜间模式转换
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/7b21ca79-d259-4ead-a919-bf36d5960480" />
-
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9d5ce609-14c7-4f65-b1f2-49f7782f3728" />
 
