@@ -36,6 +36,45 @@ import { ref } from 'vue'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
 import { marked } from 'marked'
+import 'highlight.js/styles/monokai-sublime.css'  // 可选代码高亮主题
+
+// 配置 marked
+marked.setOptions({
+  gfm: true,           // 启用 GitHub 风格的 Markdown（表格、自动链接等）
+  breaks: true,        // 支持换行符转换为 <br>
+  highlight: function(code, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(code, { language: lang }).value
+      } catch (err) {}
+    }
+    return hljs.highlightAuto(code).value
+  }
+})
+
+// 自定义扩展：支持 ==高亮==
+const highlightExtension = {
+  name: 'highlight',
+  level: 'inline',
+  start(src) {
+    return src.match(/==/)?.index
+  },
+  tokenizer(src, tokens) {
+    const match = src.match(/^==([^==]+)==/)
+    if (match) {
+      return {
+        type: 'highlight',
+        raw: match[0],
+        text: match[1].trim()
+      }
+    }
+  },
+  renderer(token) {
+    return `<mark>${token.text}</mark>`
+  }
+}
+
+marked.use({ extensions: [highlightExtension] })
 
 export default {
   name: 'App',
