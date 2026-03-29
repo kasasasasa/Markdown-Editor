@@ -39,3 +39,18 @@ npm run dev
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/7b21ca79-d259-4ead-a919-bf36d5960480" />
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9d5ce609-14c7-4f65-b1f2-49f7782f3728" />
 
+### 打包成exe
+#### 安装依赖并构建
+```
+cd frontend
+npm install          # 安装依赖（包括 marked、vue 等）
+npm run build        # 默认输出到 dist/ 目录
+```
+#### 安装pyinstaller
+```
+pip install pyinstaller
+```
+#### 执行
+```
+pyinstaller --onefile --add-data "static;static" app.py
+```
