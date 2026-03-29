@@ -4,6 +4,7 @@ import markdown
 import os
 from datetime import datetime
 import json
+import sys
 
 app = Flask(__name__)
 CORS(app)  # 允许跨域请求
@@ -11,6 +12,36 @@ CORS(app)  # 允许跨域请求
 # 配置
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ---------- 新增：静态文件服务 ----------
+# 判断是否被打包成 exe
+if getattr(sys, 'frozen', False):
+    base_path = sys._MEIPASS
+else:
+    base_path = os.path.abspath(".")
+
+# 静态文件夹路径（存放 Vue 构建产物）
+static_folder = os.path.join(base_path, 'static')
+# 确保 static 目录存在（打包后会自动解压到 _MEIPASS/static）
+if not os.path.exists(static_folder):
+    os.makedirs(static_folder)
+
+# 设置 Flask 静态文件夹
+app.static_folder = static_folder
+app.static_url_path = ''
+
+# 根路由：返回 index.html（支持 Vue Router history 模式）
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    # 如果请求的是静态文件（如 .js, .css），直接返回
+    if path and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    # 否则返回 index.html（前端路由）
+    try:
+        return send_from_directory(app.static_folder, 'index.html')
+    except Exception:
+        return "index.html not found. Please check static folder.", 404
 
 @app.route('/api/render', methods=['POST'])
 def render_markdown():
